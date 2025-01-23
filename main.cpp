@@ -61,7 +61,6 @@ int main(){
     auto start = std::chrono::steady_clock::now(); 
     fo(i, amount){
         ll hash = compute_hash(strings[i]);
-        cout << hash << endl;
     }
     cout << "Time taken: " << since(start).count() << "ms" << endl;
 

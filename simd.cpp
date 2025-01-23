@@ -37,19 +37,15 @@ vector<__m256i> rvals_simd;
 
 ll compute_hash_simd(string &s){
     __m256i hash_simd = _mm256_setzero_si256();
-    uint64_t* vals = new uint64_t[s.size()];
-    for(size_t i = 0; i < s.size(); i++) {
-        vals[i] = (uint64_t)s[i];
-    }
     
     for(size_t i = 0; i < s.size(); i += 4) {
-        __m256i chars_a = _mm256_loadu_si256((__m256i*)&vals[i]);
+        __m256i chars_a = _mm256_set_epi64x(s[i+3], s[i+2], s[i+1], s[i]);
 
         __m256i mul_simd = _mm256_mul_epi32(chars_a, rvals_simd[i/4]);
         hash_simd = _mm256_xor_si256(hash_simd, mul_simd);
     }
-    uint64_t* res = (uint64_t*)&hash_simd;
-    return res[0]^res[1]^res[2]^res[3];
+    uint64_t* vals = (uint64_t*)&hash_simd;
+    return vals[0]^vals[1]^vals[2]^vals[3];
 }
 
 int main(){
